@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional Batch Purchase Trading Plan</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(45deg, #1e3c72, #2a5298);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .language-selector {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .language-selector label {
+            font-size: 0.9em;
+            opacity: 0.8;
+        }
+
+        .language-selector select {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 5px;
+            font-size: 0.9em;
+            cursor: pointer;
+        }
+
+        .language-selector select option {
+            background: #2a5298;
+            color: white;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            padding: 30px;
+        }
+
+        .input-section {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .output-section {
+            background: #1a1a1a;
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .section-title {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            color: #2a5298;
+            border-bottom: 3px solid #2a5298;
+            padding-bottom: 10px;
+        }
+
+        .output-section .section-title {
+            color: #64ffda;
+            border-bottom-color: #64ffda;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #2a5298;
+            box-shadow: 0 0 0 3px rgba(42, 82, 152, 0.1);
+        }
+
+        .price-inputs {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+        }
+
+        .generate-btn {
+            width: 100%;
+            background: linear-gradient(45deg, #2a5298, #1e3c72);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .generate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(42, 82, 152, 0.3);
+        }
+
+        .result-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 4px solid #64ffda;
+        }
+
+        .result-card h3 {
+            color: #64ffda;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+
+        .trade-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .trade-table th {
+            background: rgba(100, 255, 218, 0.2);
+            color: #64ffda;
+            padding: 15px 10px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 0.9em;
+            border-bottom: 2px solid rgba(100, 255, 218, 0.3);
+        }
+
+        .trade-table td {
+            padding: 12px 10px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.95em;
+        }
+
+        .trade-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .trade-table tr:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .batch-number {
+            font-weight: bold;
+            color: #64ffda;
+        }
+
+        .buy-price {
+            color: #4ade80;
+            font-weight: 600;
+        }
+
+        .stop-loss {
+            color: #f87171;
+            font-weight: 600;
+        }
+
+        .risk-amount {
+            color: #f59e0b;
+            font-weight: 600;
+            background: rgba(245, 158, 11, 0.1);
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+
+        .summary-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .stat-item {
+            background: rgba(100, 255, 218, 0.1);
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #64ffda;
+        }
+
+        .stat-label {
+            font-size: 0.9em;
+            opacity: 0.8;
+            margin-top: 5px;
+        }
+
+        .export-buttons {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .export-btn {
+            background: rgba(100, 255, 218, 0.2);
+            color: #64ffda;
+            border: 1px solid #64ffda;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .export-btn:hover {
+            background: rgba(100, 255, 218, 0.3);
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+                gap: 20px;
+                padding: 20px;
+            }
+
+            .header h1 {
+                font-size: 2em;
+            }
+
+            .language-selector {
+                position: static;
+                justify-content: center;
+                margin-top: 15px;
+            }
+
+            .price-inputs {
+                grid-template-columns: 1fr;
+            }
+
+            .export-buttons {
+                grid-template-columns: 1fr;
+            }
+
+            .trade-table {
+                font-size: 0.8em;
+            }
+
+            .trade-table th,
+            .trade-table td {
+                padding: 8px 5px;
+            }
+
+            .summary-stats {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="language-selector">
+                <label>Select Language:</label>
+                <select id="languageSelect">
+                    <option value="en">🇺🇸 English</option>
+                    <option value="zh">🇨🇳 中文</option>
+                    <option value="fr">🇫🇷 Français</option>
+                    <option value="de">🇩🇪 Deutsch</option>
+                    <option value="es">🇪🇸 Español</option>
+                </select>
+            </div>
+            <h1>📊 Professional Batch Purchase Trading Plan</h1>
+            <p>Intelligent Analysis & Assessment for Professional Trading Strategies</p>
+        </div>
+
+        <div class="main-content">
+            <div class="input-section">
+                <h2 class="section-title">📊 Strategy Parameters</h2>
+                
+                <div class="input-group">
+                    <label for="totalAmount">💰 Total Investment Amount ($)</label>
+                    <input type="number" id="totalAmount" placeholder="e.g.: 20000" value="20000">
+                </div>
+
+                <div class="input-group">
+                    <label for="stopLossPerBatch">⛔ Stop Loss Per Batch ($)</label>
+                    <input type="number" id="stopLossPerBatch" placeholder="e.g.: 400" value="400">
+                </div>
+
+                <div class="input-group">
+                    <label for="totalRisk">🔴 Maximum Total Risk ($)</label>
+                    <input type="number" id="totalRisk" placeholder="e.g.: 2000" value="2000">
+                </div>
+
+                <div class="input-group">
+                    <label>📈 Purchase Prices (5 Batches) - USD</label>
+                    <div class="price-inputs">
+                        <input type="number" id="price1" placeholder="Batch 1 ($)" step="0.01" value="2.86">
+                        <input type="number" id="price2" placeholder="Batch 2 ($)" step="0.01" value="2.67">
+                        <input type="number" id="price3" placeholder="Batch 3 ($)" step="0.01" value="2.43">
+                        <input type="number" id="price4" placeholder="Batch 4 ($)" step="0.01" value="2.20">
+                        <input type="number" id="price5" placeholder="Batch 5 ($)" step="0.01" value="1.95">
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label for="target1">🎯 First Profit Target ($)</label>
+                    <input type="number" id="target1" placeholder="e.g.: 8.60" step="0.01" value="8.60">
+                </div>
+
+                <div class="input-group">
+                    <label for="target2">🚀 Second Profit Target ($)</label>
+                    <input type="number" id="target2" placeholder="e.g.: 28.59" step="0.01" value="28.59">
+                </div>
+
+                <button class="generate-btn" onclick="generatePlan()">
+                    🚀 Generate Trading Plan
+                </button>
+            </div>
+
+            <div class="output-section">
+                <h2 class="section-title">📋 Trading Plan Report</h2>
+                <div id="output">
+                    <div style="text-align: center; color: rgba(255, 255, 255, 0.6); padding: 50px;">
+                        <h3>📊 Click Generate to Create Your Trading Plan</h3>
+                        <p>System will automatically calculate optimal position sizing and risk management</p>
+                    </div>
+                </div>
+
+                <div style="background: rgba(100, 255, 218, 0.1); padding: 20px; border-radius: 10px; margin-top: 20px; border: 1px solid rgba(100, 255, 218, 0.3);">
+                    <h4 style="color: #64ffda; margin-bottom: 10px;">🔌 API Integration Ready</h4>
+                    <p>Pre-configured for GPT-4, Claude, and other AI platforms</p>
+                    <p>Export formats: JSON, CSV, PDF reports</p>
+                </div>
+
+                <div class="export-buttons">
+                    <button class="export-btn" onclick="exportToJSON()">📄 JSON</button>
+                    <button class="export-btn" onclick="exportToCSV()">📊 CSV</button>
+                    <button class="export-btn" onclick="copyPrompt()">📋 Copy Prompt</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentPlan = null;
+        let currentLanguage = 'en';
+
+        const texts = {
+            en: {
+                title: "📊 Professional Batch Purchase Trading Plan",
+                subtitle: "Intelligent Analysis & Assessment for Professional Trading Strategies",
+                parameters: "📊 Strategy Parameters",
+                totalAmount: "💰 Total Investment Amount ($)",
+                stopLoss: "⛔ Stop Loss Per Batch ($)",
+                totalRisk: "🔴 Maximum Total Risk ($)",
+                prices: "📈 Purchase Prices (5 Batches) - USD",
+                target1: "🎯 First Profit Target ($)",
+                target2: "🚀 Second Profit Target ($)",
+                generate: "🚀 Generate Trading Plan",
+                report: "📋 Trading Plan Report",
+                batchDetails: "📊 Batch Purchase Details",
+                summary: "📈 Position Summary",
+                funds: "💰 Fund Usage (USD)",
+                strategy: "🎯 Profit Strategy",
+                totalShares: "Total Shares",
+                avgCost: "Average Cost",
+                actualInvestment: "Actual Investment",
+                plannedInvestment: "Planned Investment",
+                usedFunds: "Used Funds",
+                remainingFunds: "Remaining Funds",
+                maxLoss: "Maximum Loss"
+            },
+            zh: {
+                title: "📊 专业分批买入交易计划",
+                subtitle: "智能分析评估专业交易策略",
+                parameters: "📊 策略参数",
+                totalAmount: "💰 总投入金额 ($)",
+                stopLoss: "⛔ 每批止损金额 ($)",
+                totalRisk: "🔴 总最大风险 ($)",
+                prices: "📈 买入价格（5批建仓）- 美元",
+                target1: "🎯 第一止盈目标 ($)",
+                target2: "🚀 第二止盈目标 ($)",
+                generate: "🚀 生成交易计划",
+                report: "📋 交易计划报告",
+                batchDetails: "📊 分批建仓明细",
+                summary: "📈 持仓汇总",
+                funds: "💰 资金使用情况 (美元)",
+                strategy: "🎯 止盈策略",
+                totalShares: "总股数",
+                avgCost: "平均成本",
+                actualInvestment: "实际投入",
+                plannedInvestment: "计划投入",
+                usedFunds: "已用资金",
+                remainingFunds: "剩余资金",
+                maxLoss: "最大亏损"
+            }
+        };
+
+        function changeLanguage() {
+            const select = document.getElementById('languageSelect');
+            currentLanguage = select.value;
+            updateTexts();
+        }
+
+        function updateTexts() {
+            const t = texts[currentLanguage];
+            
+            document.querySelector('h1').textContent = t.title;
+            document.querySelector('p').textContent = t.subtitle;
+            
+            document.querySelectorAll('.section-title')[0].textContent = t.parameters;
+            document.querySelectorAll('.section-title')[1].textContent = t.report;
+            
+            document.querySelectorAll('label')[1].textContent = t.totalAmount;
+            document.querySelectorAll('label')[2].textContent = t.stopLoss;
+            document.querySelectorAll('label')[3].textContent = t.totalRisk;
+            document.querySelectorAll('label')[4].textContent = t.prices;
+            document.querySelectorAll('label')[5].textContent = t.target1;
+            document.querySelectorAll('label')[6].textContent = t.target2;
+            
+            document.querySelector('.generate-btn').textContent = t.generate;
+        }
+
+        function generatePlan() {
+            const totalAmount = parseFloat(document.getElementById('totalAmount').value);
+            const stopLossPerBatch = parseFloat(document.getElementById('stopLossPerBatch').value);
+            const totalRisk = parseFloat(document.getElementById('totalRisk').value);
+            const prices = [
+                parseFloat(document.getElementById('price1').value),
+                parseFloat(document.getElementById('price2').value),
+                parseFloat(document.getElementById('price3').value),
+                parseFloat(document.getElementById('price4').value),
+                parseFloat(document.getElementById('price5').value)
+            ];
+            const target1 = parseFloat(document.getElementById('target1').value);
+            const target2 = parseFloat(document.getElementById('target2').value);
+
+            if (!totalAmount || !stopLossPerBatch || !totalRisk || prices.some(p => !p) || !target1 || !target2) {
+                alert('Please fill in all required parameters!');
+                return;
+            }
+
+            currentPlan = calculateTradingPlan(totalAmount, stopLossPerBatch, totalRisk, prices, target1, target2);
+            showResults(currentPlan);
+        }
+
+        function calculateTradingPlan(totalAmount, stopLossPerBatch, totalRisk, prices, target1, target2) {
+            const plan = { batches: [], summary: {}, targets: { target1, target2 } };
+            const amountPerBatch = totalAmount / 5;
+            let totalShares = 0;
+            let totalCost = 0;
+
+            for (let i = 0; i < 5; i++) {
+                const price = prices[i];
+                const shares = Math.floor(amountPerBatch / price);
+                const actualAmount = shares * price;
+                const stopLossPrice = price - (stopLossPerBatch / shares);
+                const riskAmount = (price - stopLossPrice) * shares;
+                
+                plan.batches.push({
+                    batch: i + 1,
+                    price: price,
+                    shares: shares,
+                    amount: actualAmount,
+                    stopLossPrice: stopLossPrice.toFixed(2),
+                    riskAmount: riskAmount.toFixed(2)
+                });
+
+                totalShares += shares;
+                totalCost += actualAmount;
+            }
+
+            const avgCost = totalCost / totalShares;
+            plan.summary = {
+                totalShares,
+                totalBudget: totalAmount.toFixed(2),
+                totalCost: totalCost.toFixed(2),
+                remainingFunds: (totalAmount - totalCost).toFixed(2),
+                avgCost: avgCost.toFixed(2),
+                target1Profit: ((target1 - avgCost) * totalShares).toFixed(2),
+                target2Profit: ((target2 - avgCost) * totalShares).toFixed(2),
+                maxTotalLoss: (stopLossPerBatch * 5).toFixed(2)
+            };
+
+            return plan;
+        }
+
+        function showResults(plan) {
+            const output = document.getElementById('output');
+            const t = texts[currentLanguage];
+            
+            let tableHtml = `
+                <div class="result-card">
+                    <h3>${t.batchDetails}</h3>
+                    <table class="trade-table">
+                        <thead>
+                            <tr>
+                                <th>${currentLanguage === 'zh' ? '批次' : 'Batch'}</th>
+                                <th>${currentLanguage === 'zh' ? '买入价格' : 'Buy Price'}</th>
+                                <th>${currentLanguage === 'zh' ? '买入数量' : 'Quantity'}</th>
+                                <th>${currentLanguage === 'zh' ? '买入金额' : 'Buy Amount'}</th>
+                                <th>${currentLanguage === 'zh' ? '止损价格' : 'Stop Loss Price'}</th>
+                                <th>${currentLanguage === 'zh' ? '止损风险金' : 'Risk Amount'}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+            `;
+
+            for (let batch of plan.batches) {
+                tableHtml += `
+                    <tr>
+                        <td class="batch-number">${currentLanguage === 'zh' ? `第${batch.batch}批` : `Batch ${batch.batch}`}</td>
+                        <td class="buy-price">$${batch.price}</td>
+                        <td>${batch.shares.toLocaleString()}</td>
+                        <td>$${batch.amount.toFixed(2)}</td>
+                        <td class="stop-loss">$${batch.stopLossPrice}</td>
+                        <td class="risk-amount">$${batch.riskAmount}</td>
+                    </tr>
+                `;
+            }
+
+            tableHtml += `
+                        </tbody>
+                    </table>
+                </div>
+            `;
+
+            let summaryHtml = `
+                <div class="result-card">
+                    <h3>${t.summary}</h3>
+                    <div class="summary-stats" style="grid-template-columns: repeat(3, 1fr);">
+                        <div class="stat-item">
+                            <div class="stat-value">${plan.summary.totalShares.toLocaleString()}</div>
+                            <div class="stat-label">${t.totalShares}</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">$${plan.summary.avgCost}</div>
+                            <div class="stat-label">${t.avgCost}</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">$${plan.summary.totalCost}</div>
+                            <div class="stat-label">${t.actualInvestment}</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            let fundsHtml = `
+                <div class="result-card">
+                    <h3>${t.funds}</h3>
+                    <div class="summary-stats">
+                        <div class="stat-item">
+                            <div class="stat-value">$${plan.summary.totalBudget}</div>
+                            <div class="stat-label">${t.plannedInvestment}</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">$${plan.summary.totalCost}</div>
+                            <div class="stat-label">${t.usedFunds}</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">$${plan.summary.remainingFunds}</div>
+                            <div class="stat-label">${t.remainingFunds}</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">$${plan.summary.maxTotalLoss}</div>
+                            <div class="stat-label">${t.maxLoss}</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            let strategyHtml = `
+                <div class="result-card">
+                    <h3>${t.strategy}</h3>
+                    <div style="margin-bottom: 15px;">
+                        <strong>${currentLanguage === 'zh' ? '第一目标' : 'First Target'} $${plan.targets.target1}:</strong><br>
+                        ${currentLanguage === 'zh' ? '预期利润' : 'Expected Profit'}: <span style="color: #64ffda;">$${plan.summary.target1Profit}</span><br>
+                        ${currentLanguage === 'zh' ? '建议卖出30-50%回本' : 'Sell 30-50% to recover costs'}
+                    </div>
+                    <div>
+                        <strong>${currentLanguage === 'zh' ? '第二目标' : 'Second Target'} $${plan.targets.target2}:</strong><br>
+                        ${currentLanguage === 'zh' ? '预期利润' : 'Expected Profit'}: <span style="color: #64ffda;">$${plan.summary.target2Profit}</span><br>
+                        ${currentLanguage === 'zh' ? '剩余持仓全部止盈' : 'Take full profit on remaining position'}
+                    </div>
+                </div>
+            `;
+
+            output.innerHTML = tableHtml + summaryHtml + fundsHtml + strategyHtml;
+        }
+
+        function exportToJSON() {
+            if (!currentPlan) {
+                alert('Please generate a trading plan first!');
+                return;
+            }
+            
+            const dataStr = JSON.stringify(currentPlan, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'trading_plan.json';
+            link.click();
+        }
+
+        function exportToCSV() {
+            if (!currentPlan) {
+                alert('Please generate a trading plan first!');
+                return;
+            }
+
+            let csv = 'Batch,Buy Price,Quantity,Buy Amount,Stop Loss Price,Risk Amount\n';
+            for (let batch of currentPlan.batches) {
+                csv += `${batch.batch},${batch.price},${batch.shares},${batch.amount.toFixed(2)},${batch.stopLossPrice},${batch.riskAmount}\n`;
+            }
+
+            const dataBlob = new Blob([csv], {type: 'text/csv'});
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'trading_plan.csv';
+            link.click();
+        }
+
+        function copyPrompt() {
+            if (!currentPlan) {
+                alert('Please generate a trading plan first!');
+                return;
+            }
+
+            const totalAmount = document.getElementById('totalAmount').value;
+            const stopLossPerBatch = document.getElementById('stopLossPerBatch').value;
+            const totalRisk = document.getElementById('totalRisk').value;
+            const prices = [
+                document.getElementById('price1').value,
+                document.getElementById('price2').value,
+                document.getElementById('price3').value,
+                document.getElementById('price4').value,
+                document.getElementById('price5').value
+            ];
+            const target1 = document.getElementById('target1').value;
+            const target2 = document.getElementById('target2').value;
+
+            const prompt = `Please generate a complete [Trading Plan + Risk Control Report + Image Annotation] based on the following trading strategy parameters:
+
+📌 Strategy Type:
+- Pyramid batch position building (different purchase prices for each batch)
+- Independent stop loss setting for each batch
+- Maximum stop loss per batch: ${stopLossPerBatch}, total maximum loss not exceeding: ${totalRisk}
+- Total investment capital: ${totalAmount}
+
+📈 Purchase Prices (Red Lines):
+- Batch 1: ${prices[0]}
+- Batch 2: ${prices[1]}
+- Batch 3: ${prices[2]}
+- Batch 4: ${prices[3]}
+- Batch 5: ${prices[4]}
+
+🎯 Profit Target Prices:
+- First target price: ${target1} (partial sell for break-even)
+- Second target price: ${target2} (maximum profit lock)
+
+🧾 Output requirements:
+1. Number of shares purchased per batch, stop loss price, corresponding stop loss amount
+2. Total position shares, average position cost
+3. Break-even logic and selling percentage when reaching first target
+4. Total profit estimation when reaching second target
+5. A black background image (or K-line style chart):
+   - Mark purchase prices with red lines
+   - Mark profit target prices with yellow lines
+   - Mark "Buy", "Profit Target 1", "Profit Target 2" arrow indicators
+   - Image can be combined with arrows or hint boxes, visually clear and professional
+
+Chart style reference TradingView or financial media display style, ultimately generate an illustrated trading plan report suitable for professional review, risk control display, and report submission.`;
+
+            navigator.clipboard.writeText(prompt).then(() => {
+                alert('AI prompt copied to clipboard! Paste directly into GPT/Claude');
+            });
+        }
+
+        document.getElementById('languageSelect').addEventListener('change', changeLanguage);
+        
+        window.onload = function() {
+            generatePlan();
+        };
+    </script>
+</body>
+</html>
